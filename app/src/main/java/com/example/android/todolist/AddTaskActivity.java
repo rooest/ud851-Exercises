@@ -1,18 +1,18 @@
 /*
-* Copyright (C) 2016 The Android Open Source Project
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (C) 2016 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.example.android.todolist;
 
@@ -24,7 +24,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import com.example.android.todolist.database.AppDatabase;
 import com.example.android.todolist.database.TaskEntry;
+
+import java.util.Date;
 
 
 public class AddTaskActivity extends AppCompatActivity {
@@ -48,7 +51,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private int mTaskId = DEFAULT_TASK_ID;
 
-    // TODO (3) Create AppDatabase member variable for the Database
+    // Completed (3) Create AppDatabase member variable for the Database
+    private AppDatabase mAppDatabase;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +60,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
         initViews();
 
-        // TODO (4) Initialize member variable for the data base
+        // Completed (4) Initialize member variable for the data base
+        mAppDatabase = AppDatabase.getInstance(getApplicationContext());
 
         if (savedInstanceState != null && savedInstanceState.containsKey(INSTANCE_TASK_ID)) {
             mTaskId = savedInstanceState.getInt(INSTANCE_TASK_ID, DEFAULT_TASK_ID);
@@ -107,15 +112,20 @@ public class AddTaskActivity extends AppCompatActivity {
      * It retrieves user input and inserts that new task data into the underlying database.
      */
     public void onSaveButtonClicked() {
-        // TODO (5) Create a description variable and assign to it the value in the edit text
-        // TODO (6) Create a priority variable and assign the value returned by getPriorityFromViews()
-        // TODO (7) Create a date variable and assign to it the current Date
+        // Completed (5) Create a description variable and assign to it the value in the edit text
+        String description = mEditText.getText().toString();
+        // Completed (6) Create a priority variable and assign the value returned by getPriorityFromViews()
+        int priorty = getPriorityFromViews();
+        // Completed (7) Create a date variable and assign to it the current Date
+        Date date = new Date();
 
-        // TODO (8) Create taskEntry variable using the variables defined above
-        // TODO (9) Use the taskDao in the AppDatabase variable to insert the taskEntry
-        // TODO (10) call finish() to come back to MainActivity
+        // Completed (8) Create taskEntry variable using the variables defined above
+        TaskEntry taskEntry = new TaskEntry(description, priorty, date);
+        // Completed (9) Use the taskDao in the AppDatabase variable to insert the taskEntry
+        mAppDatabase.taskDao().insertTask(taskEntry);
+        // Completed (10) call finish() to come back to MainActivity
+        finish();
     }
-
     /**
      * getPriority is called whenever the selected priority needs to be retrieved
      */
